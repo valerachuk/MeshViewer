@@ -1,6 +1,8 @@
 #include "Cube.h"
 
 Solid Cube::GetCube(double L, Vector3 origin) {
+	if (L <= 0)
+		throw std::invalid_argument("L have to be > 0");
 
 	Solid cube;
 

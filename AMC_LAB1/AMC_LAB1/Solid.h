@@ -4,11 +4,9 @@
 
 class Solid {
 	std::string name;
-	int facetcnt;
 	std::vector<Facet> facets;
 public:
 	void AddFacet(Facet);
-	int getFacetCnt() const;
 	std::string getSolidName() const;
 	Solid();
 	Solid(std::string);

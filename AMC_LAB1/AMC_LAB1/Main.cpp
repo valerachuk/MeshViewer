@@ -5,6 +5,7 @@
 #include "Solid.h"
 #include "Sphere.h"
 #include "Cube.h"
+#include "Facet.h"
 
 using namespace std;
 
@@ -27,7 +28,7 @@ int ReadWrite() {
 
 	auto t2 = chrono::high_resolution_clock::now();
 	file.close();
-	cout << "Solid name: " << v.getSolidName() << " Facet count: " << v.getFacetCnt() << endl << "Read time: " << chrono::duration_cast<chrono::milliseconds>(t2 - t1).count() << "ms\n";
+	//cout << "Solid name: " << v.getSolidName() << " Facet count: " << v.getFacetCnt() << endl << "Read time: " << chrono::duration_cast<chrono::milliseconds>(t2 - t1).count() << "ms\n";
 
 	ofstream ofile(outFile);
 	t1 = chrono::high_resolution_clock::now();
@@ -54,9 +55,20 @@ int CreateCube() {
 	ofile.close();
 	return 0;
 }
+
 int main()
 {
 	//return ReadWrite();
-	return CreateSphere();
+	//return CreateSphere();
 	//return CreateCube();
+	try
+	{
+		Facet f = Facet(Vector3(), Vector3(), Vector3(27, 8, 94));
+		std::cout << f;
+	}
+	catch (const std::exception& arg)
+	{
+		cout << arg.what();
+	}
+	return 0;
 }

@@ -1,11 +1,7 @@
 #include "Solid.h"
-Solid::Solid() : name("NullName"), facetcnt(0) {}
+Solid::Solid() : name("NullName"){}
 
-Solid::Solid(std::string name) : name(name), facetcnt(0) {}
-
-int Solid::getFacetCnt() const {
-	return facets.size();
-}
+Solid::Solid(std::string name) : name(name){}
 
 std::string Solid::getSolidName() const {
 	return name;
@@ -19,7 +15,7 @@ istream& operator>> (istream& in, Solid& solid) {
 	std::string skip;
 	in >> skip;
 	if (skip != "solid")
-		throw "solid keyword is missing";
+		throw std::invalid_argument("solid keyword is missing");
 	
 	in >> solid.name;
 
@@ -29,7 +25,7 @@ istream& operator>> (istream& in, Solid& solid) {
 		if (skip == "endsolid" || in.eof())
 			return in;
 		if (skip != "facet")
-			throw "facet keyword is missing";
+			throw std::invalid_argument("facet keyword is missing");
 
 		Facet toPush;
 		in >> toPush;
