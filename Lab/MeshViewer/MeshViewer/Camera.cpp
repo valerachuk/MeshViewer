@@ -110,9 +110,11 @@ void Camera::transform(const glm::mat4& trf)
 void Camera::rotate(glm::vec3 point, glm::vec3 axis, float angle)
 {
 	translate(-point);
+	target -= point;
 	transform(glm::rotate(glm::mat4(1.0f), glm::radians(angle), axis));
 	updateUp();
 	translate(point);
+	target += point;
 }
 
 void Camera::setEyeTargetUp(glm::vec3 newEye, glm::vec3 newTarget, glm::vec3 newUp)
