@@ -56,13 +56,18 @@ void selectTarget(double xPos, double yPos)
     Shader* lastUsed = rs.getShaderProgram();
     rs.setShaderProgram(*unlitShaderPtr);
 
+    RenderMode lastMode = renderSystemPtr->getRenderMode();
+    renderSystemPtr->setRenderMode(RenderMode::Triangles);
+
     for (int i = 0; i < scene.getMeshCount(); i++)
     {
         rs.setIsDefaultColor(false);
         rs.setCustomColor(glm::vec3((float)(i+1)/scene.getMeshCount(), 1.0f, 1.0f));
         rs.setWorldMatrix(scene[i].calcWorldMatrix());
-        rs.renderTriangleSoup(scene[i].getVao(), scene[i].getVertexCount());
+        rs.render(scene[i].getVao(), scene[i].getVertexCount());
     }
+
+    renderSystemPtr->setRenderMode(lastMode);
 
     GLfloat* color = new GLfloat[3];
     glReadPixels(xPos, windowPtr->getHeigth() - yPos, 1, 1, GL_RGB, GL_FLOAT, color);
@@ -70,11 +75,12 @@ void selectTarget(double xPos, double yPos)
     rs.setShaderProgram(*lastUsed);
 
     int id = (int)glm::roundEven(color[0] * scene.getMeshCount() - 1);
-    std::cout << "Selected id: " << id << std::endl;
+    //std::cout << "Selected id: " << id << std::endl;
     if (id >= 0)
     {
         scene.setSelectionId(id);
         viewportPtr->getCamera().updateTarget(scene.getCurrentSelection().getWorldPosition());
+        viewportPtr->getCamera().setIsoView();
     }
 }
 
@@ -144,7 +150,12 @@ void onKeyCallback(KeyCode key, Action act, Modifier mods)
         case KeyCode::F8:
             viewportPtr->setParallelProjection(!viewportPtr->isParalellProjection());
             break;
+
+        case KeyCode::F9:
+            renderSystemPtr->setRenderMode((RenderMode)!(bool)renderSystemPtr->getRenderMode());
+            break;
         }
+
     }
 }
 
@@ -164,13 +175,13 @@ void onCursorCallback(double xPos, double yPos)
     if (lastMouse == ButtonCode::Right)
     {
         cam.rotate(cam.getTarget(), cam.calcRight(), sens * -deltaY);
-        cam.rotate(cam.getTarget(), glm::cross(cam.calcForward(), cam.calcRight()), sens * deltaX);
+        cam.rotate(cam.getTarget(), cam.getUp(), sens * -deltaX);
         //std::cout << deltaX << " " << deltaY << std::endl;
     }
     else if (lastMouse == ButtonCode::Left && scenePtr->getCurrentSelectionId() >= 0)
     {
         scenePtr->getCurrentSelection().rotate(cam.calcRight(), sens * deltaY);
-        scenePtr->getCurrentSelection().rotate(glm::cross(cam.calcForward(), cam.calcRight()), sens * -deltaX);
+        scenePtr->getCurrentSelection().rotate(cam.getUp(), sens * deltaX);
     }
 }
 
@@ -232,7 +243,7 @@ int main()
             rs.setIsDefaultColor(scene.getCurrentSelectionId() == i ? false : scene[i].isColorDefault());
             rs.setCustomColor(scene.getCurrentSelectionId() == i ? selectionColor : scene[i].getColor());
             rs.setWorldMatrix(scene[i].calcWorldMatrix());
-            rs.renderTriangleSoup(scene[i].getVao(), scene[i].getVertexCount());
+            rs.render(scene[i].getVao(), scene[i].getVertexCount());
         }
 
         glfwSwapBuffers(window.getGLFWHandle());

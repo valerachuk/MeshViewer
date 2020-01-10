@@ -20,7 +20,7 @@ glm::vec3 Camera::calcRight() const
 	return glm::normalize(glm::cross(calcForward(), up));
 }
 
-double Camera::distanceFromEyeToTarget() const
+float Camera::distanceFromEyeToTarget() const
 {
 	return glm::distance(eye, target);
 }
@@ -35,9 +35,14 @@ const glm::vec3& Camera::getTarget() const
 	return target;
 }
 
+const glm::vec3& Camera::getUp() const
+{
+	return up;
+}
+
 void Camera::setFrontView()
 {
-	double D = distanceFromEyeToTarget();
+	float D = distanceFromEyeToTarget();
 	setEyeTargetUp(target + glm::vec3(0.0f, 0.0f, 1.0f), target, glm::vec3(0.0f, 1.0f, 0.0f));
 	setDistnceToTarget(D);
 }
@@ -85,11 +90,6 @@ void Camera::zoom(float factor)
 	setDistnceToTarget(distanceFromEyeToTarget() * factor);
 }
 
-void Camera::translate(glm::vec3 delta)
-{
-	eye += delta;
-}
-
 void Camera::setDistnceToTarget(float D)
 {
 	eye = target - calcForward() * D;
@@ -109,11 +109,13 @@ void Camera::transform(const glm::mat4& trf)
 
 void Camera::rotate(glm::vec3 point, glm::vec3 axis, float angle)
 {
-	translate(-point);
+	eye -= point;
 	target -= point;
+
 	transform(glm::rotate(glm::mat4(1.0f), glm::radians(angle), axis));
 	updateUp();
-	translate(point);
+
+	eye += point;
 	target += point;
 }
 

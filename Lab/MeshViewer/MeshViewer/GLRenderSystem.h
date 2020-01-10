@@ -6,6 +6,12 @@
 #include "Shader.h"
 #include "Vertex.h"
 
+enum class RenderMode
+{
+	Triangles = 0,
+	Lines = 1,
+};
+
 class GLRenderSystem
 {
 public:
@@ -15,8 +21,7 @@ public:
 	static void clearDisplay(float red, float green, float blue);
 	static void setViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t heigth);
 
-	void renderTriangleSoup(GLuint VAO, GLuint verticesCount);
-	void renderLines(GLuint VAO, GLuint verticesCount);
+	void render(GLuint VAO, GLuint verticesCount);
 	
 	void setupLight(glm::vec3 position, float Ia, float Id, float Is);
 	void setCameraPos(glm::vec3 position);
@@ -39,6 +44,9 @@ public:
 	void setShaderProgram(Shader&);
 	Shader* getShaderProgram();
 
+	RenderMode getRenderMode();
+	void setRenderMode(RenderMode mode);
+
 private:
 	glm::mat4 worldMatrix;
 	glm::mat4 viewMatrix;
@@ -52,6 +60,8 @@ private:
 
 	Shader* shaderProgram;
 
+	RenderMode renderMode;
+
 	void sendUniformsToShader();
-	void renderVertices(GLuint VAO, GLenum mode, GLuint verticesCount);
+	void renderVertices(GLuint VAO, GLuint verticesCount);
 };

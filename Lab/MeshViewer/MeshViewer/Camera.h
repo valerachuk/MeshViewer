@@ -10,9 +10,10 @@ public:
 	glm::mat4 calcViewMatrix() const;
 	glm::vec3 calcForward() const;
 	glm::vec3 calcRight() const;
-	double distanceFromEyeToTarget() const;
+	float distanceFromEyeToTarget() const;
 	const glm::vec3& getEye() const;
 	const glm::vec3& getTarget() const;
+	const glm::vec3& getUp() const;
 	
 	void setFrontView();
 	void setTopView();
@@ -23,7 +24,6 @@ public:
 	void setIsoView();
 
 	void zoom(float factor);
-	void translate(glm::vec3 delta);
 	void setDistnceToTarget(float D);
 	void updateTarget(glm::vec3 newTarget);
 	void transform(const glm::mat4& trf);

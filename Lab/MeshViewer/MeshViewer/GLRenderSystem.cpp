@@ -7,7 +7,8 @@ GLRenderSystem::GLRenderSystem() :
 	isDefaultColor(true),
 	customColor(glm::vec3(1.0f)),
 	cameraPos(glm::vec3(1.0f)),
-	shaderProgram(nullptr)
+	shaderProgram(nullptr),
+	renderMode(RenderMode::Triangles)
 {
 	setupLight(glm::vec3(0), 0, 0, 0);
 }
@@ -30,14 +31,18 @@ void GLRenderSystem::setViewport(uint32_t x, uint32_t y, uint32_t width, uint32_
 	glViewport(x, y, width, heigth);
 }
 
-void GLRenderSystem::renderTriangleSoup(GLuint VAO, GLuint verticesCount)
+void GLRenderSystem::render(GLuint VAO, GLuint verticesCount)
 {
-	renderVertices(VAO, GL_TRIANGLES, verticesCount);
-}
-
-void GLRenderSystem::renderLines(GLuint VAO, GLuint verticesCount)
-{
-	renderVertices(VAO, GL_LINE_LOOP, verticesCount);
+	if (renderMode == RenderMode::Triangles)
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		renderVertices(VAO, verticesCount);
+	}
+	else 
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		renderVertices(VAO, verticesCount);
+	}
 }
 
 void GLRenderSystem::setupLight(glm::vec3 position, float Ia, float Id, float Is)
@@ -113,6 +118,16 @@ Shader* GLRenderSystem::getShaderProgram()
 	return shaderProgram;
 }
 
+RenderMode GLRenderSystem::getRenderMode()
+{
+	return renderMode;
+}
+
+void GLRenderSystem::setRenderMode(RenderMode mode)
+{
+	renderMode = mode;
+}
+
 void GLRenderSystem::sendUniformsToShader()
 {
 	if (shaderProgram != nullptr)
@@ -131,13 +146,13 @@ void GLRenderSystem::sendUniformsToShader()
 	}
 }
 
-void GLRenderSystem::renderVertices(GLuint VAO, GLenum mode, GLuint verticesCount)
+void GLRenderSystem::renderVertices(GLuint VAO, GLuint verticesCount)
 {
 	glBindVertexArray(VAO);
 
 	shaderProgram->UseProgram();
 	sendUniformsToShader();
 
-	glDrawArrays(mode, 0, verticesCount);
+	glDrawArrays(GL_TRIANGLES, 0, verticesCount);
 	glBindVertexArray(0);
 }

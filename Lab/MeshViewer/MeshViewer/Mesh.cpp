@@ -1,6 +1,6 @@
 #include "Mesh.h"
 
-Mesh::Mesh(const std::vector<Vertex>& vertices, bool isDefaultColor, glm::vec3 color):
+Mesh::Mesh(std::vector<Vertex>& vertices, bool isDefaultColor, glm::vec3 color):
 	VBO(0),
 	VAO(0),
 	color(color), 
@@ -15,6 +15,9 @@ Mesh::Mesh(const std::vector<Vertex>& vertices, bool isDefaultColor, glm::vec3 c
 	vertexCount = vertices.size();
 	centerMass = calcCenterMass(vertices);
 	fitFactor = calcFitFactor(vertices, 1);
+
+	vertices.clear();
+	vertices.shrink_to_fit();
 }
 
 Mesh::~Mesh()
@@ -81,14 +84,17 @@ glm::mat4 Mesh::calcWorldMatrix()
 
 void Mesh::loadMeshToGpu(const std::vector<Vertex>& vertices)
 {
-	GLfloat* vertexArray = verticesToArray(vertices);
+	if (vertices.size() % 3 != 0)
+	{
+		throw new std::invalid_argument("Vertices size % 3 must be equals 0!");
+	}
 
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 	glBindVertexArray(VAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * 9 * sizeof(float), vertexArray, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * 9 * sizeof(float), &vertices[0], GL_STATIC_DRAW);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
@@ -100,8 +106,6 @@ void Mesh::loadMeshToGpu(const std::vector<Vertex>& vertices)
 	glEnableVertexAttribArray(2);
 
 	glBindVertexArray(0);
-
-	delete[] vertexArray;
 }
 
 float Mesh::calcFitFactor(const std::vector<Vertex>& vertices, float maxSize)
@@ -140,32 +144,4 @@ glm::vec3 Mesh::calcCenterMass(const std::vector<Vertex>& vertices)
 	}
 
 	return sum / toatalArea;
-}
-
-float* Mesh::verticesToArray(const std::vector<Vertex>& vertices)
-{
-	int vectorSize = vertices.size();
-	if (vectorSize % 3 != 0)
-	{
-		throw new std::invalid_argument("Vertices size % 3 must be equals 0!");
-	}
-
-	float* vertexArray = new float[vectorSize * 9];
-	for (int32_t vectorCnt = 0, arrayCnt = 0; vectorCnt < vectorSize; vectorCnt++, arrayCnt += 9)
-	{
-		vertexArray[arrayCnt] = vertices[vectorCnt].position.x;
-		vertexArray[arrayCnt + 1] = vertices[vectorCnt].position.y;
-		vertexArray[arrayCnt + 2] = vertices[vectorCnt].position.z;
-
-		vertexArray[arrayCnt + 3] = vertices[vectorCnt].normal.x;
-		vertexArray[arrayCnt + 4] = vertices[vectorCnt].normal.y;
-		vertexArray[arrayCnt + 5] = vertices[vectorCnt].normal.z;
-
-		vertexArray[arrayCnt + 6] = vertices[vectorCnt].color.r;
-		vertexArray[arrayCnt + 7] = vertices[vectorCnt].color.g;
-		vertexArray[arrayCnt + 8] = vertices[vectorCnt].color.b;
-
-	}
-
-	return vertexArray;
 }
