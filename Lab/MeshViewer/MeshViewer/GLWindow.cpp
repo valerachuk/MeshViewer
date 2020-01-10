@@ -131,7 +131,6 @@ void GLWindow::showConsole()
 
 void GLWindow::setFullScreen()
 {
-	glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 	GLFWmonitor* monitor = glfwGetPrimaryMonitor();
 	const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 
@@ -139,16 +138,18 @@ void GLWindow::setFullScreen()
 	glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
 	glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
 	glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
+
+	glfwSetWindowAttrib(handle, GLFW_DECORATED, GLFW_FALSE);
 	glfwSetWindowMonitor(handle, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
 	glfwSwapInterval(1);
 }
 
 void GLWindow::setHalfScreenWindowed()
 {
-	glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 	GLFWmonitor* monitor = glfwGetPrimaryMonitor();
 	const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 
+	glfwSetWindowAttrib(handle, GLFW_DECORATED, GLFW_TRUE);
 	glfwSetWindowMonitor(handle, nullptr, mode->width / 4, mode->height / 4, mode->width / 2, mode->height / 2, mode->refreshRate);
 	glfwSwapInterval(1);
 }
