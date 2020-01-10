@@ -9,7 +9,7 @@
 class Mesh
 {
 public:
-	Mesh(const std::vector<Vertex>& vertices, bool isDefaultColor = true, glm::vec3 color = glm::vec3(0.0f, 0.0f, 0.0f));
+	Mesh(std::vector<Vertex> vertices, bool isDefaultColor = true, glm::vec3 color = glm::vec3(0.0f, 0.0f, 0.0f));
 	~Mesh();
 
 	void setColor(glm::vec3);
@@ -36,7 +36,7 @@ private:
 	glm::mat4 roationMatrix;
 	float fitFactor;
 
-	void loadMeshToGpu(const std::vector<Vertex>& vertices);
+	void loadMeshToGpu(std::vector<Vertex> vertices);
 	float calcFitFactor(const std::vector<Vertex>& vertices, float maxSize);
 	glm::vec3 calcCenterMass(const std::vector<Vertex>& vertices);
 };

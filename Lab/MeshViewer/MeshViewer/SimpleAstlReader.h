@@ -7,7 +7,7 @@
 class SimpleAstlReader
 {
 public:
-	static std::vector<Vertex>& getVertices(const char* path);
+	static std::vector<Vertex> getVertices(const char* path);
 	
 private:
 	static std::istream& readVec3(std::istream& in, glm::vec3& vector);

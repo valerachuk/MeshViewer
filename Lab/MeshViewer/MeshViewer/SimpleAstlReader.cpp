@@ -1,13 +1,12 @@
 #include "SimpleAstlReader.h"
 
-std::vector<Vertex>& SimpleAstlReader::getVertices(const char* path)
+std::vector<Vertex> SimpleAstlReader::getVertices(const char* path)
 {
 	std::ifstream file(path);
-	std::vector<Vertex>* vertices = new std::vector<Vertex>();
-	readSolid(file, *vertices);
-	vertices->shrink_to_fit();
+	std::vector<Vertex> vertices = std::vector<Vertex>();
+	readSolid(file, vertices);
 	file.close();
-	return *vertices;
+	return vertices;
 }
 
 std::istream& SimpleAstlReader::readVec3(std::istream& in, glm::vec3& vector)

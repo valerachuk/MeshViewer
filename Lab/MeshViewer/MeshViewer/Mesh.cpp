@@ -1,6 +1,6 @@
 #include "Mesh.h"
 
-Mesh::Mesh(const std::vector<Vertex>& vertices, bool isDefaultColor, glm::vec3 color):
+Mesh::Mesh(std::vector<Vertex> vertices, bool isDefaultColor, glm::vec3 color):
 	VBO(0),
 	VAO(0),
 	color(color), 
@@ -15,9 +15,6 @@ Mesh::Mesh(const std::vector<Vertex>& vertices, bool isDefaultColor, glm::vec3 c
 	vertexCount = vertices.size();
 	centerMass = calcCenterMass(vertices);
 	fitFactor = calcFitFactor(vertices, 1);
-
-	/*vertices.clear();
-	vertices.shrink_to_fit();*/
 }
 
 Mesh::~Mesh()
@@ -82,9 +79,9 @@ glm::mat4 Mesh::calcWorldMatrix()
 	return matrix;
 }
 
-void Mesh::loadMeshToGpu(const std::vector<Vertex>& vertices)
+void Mesh::loadMeshToGpu(std::vector<Vertex> vertices)
 {
-	if (vertices.size() % 3 != 0 && vertices.size() <= 0)
+	if (vertices.size() <= 0 || vertices.size() % 3 != 0)
 	{
 		throw new std::invalid_argument("Vertices size % 3 must be equals 0!");
 	}
@@ -131,7 +128,6 @@ glm::vec3 Mesh::calcCenterMass(const std::vector<Vertex>& vertices)
 
 	for (uint32_t i = 0; i < vertices.size(); i += 3)
 	{
-
 		const glm::vec3& pntA = vertices[i].position;
 		const glm::vec3& pntB = vertices[i + 1].position;
 		const glm::vec3& pntC = vertices[i + 2].position;
