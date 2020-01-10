@@ -153,6 +153,14 @@ void onKeyCallback(KeyCode key, Action act, Modifier mods)
         case KeyCode::F9:
             renderSystemPtr->setRenderMode((RenderMode)!(bool)renderSystemPtr->getRenderMode());
             break;
+
+        case KeyCode::F10:
+            windowPtr->setHalfScreenWindowed();
+            break;
+
+        case KeyCode::F11:
+            windowPtr->setFullScreen();
+            break;
         }
 
     }
@@ -197,13 +205,13 @@ int main()
     glfwInit();
     glewInit();
 
+    GLWindow::hideConsole();
     GLWindow window("Ultimate 8D Viewer", 1280, 720);
     windowPtr = &window;
 
     Viewport viewport;
     viewportPtr = &viewport;
 
-    viewport.setViewportSize(window.getWidth(), window.getHeigth());
     viewport.getCamera().setEyeTargetUp(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
     window.setKeyCallback(onKeyCallback);
@@ -228,7 +236,10 @@ int main()
     while (!glfwWindowShouldClose(window.getGLFWHandle()))
     {
         glfwWaitEvents();
+
         rs.setViewport(0, 0, window.getWidth(), window.getHeigth());
+        viewport.setViewportSize(window.getWidth(), window.getHeigth());
+
         GLRenderSystem::clearDisplay(0.2f, 0.2f, 0.2f);
 
         rs.setViewMatrix(viewport.getCamera().calcViewMatrix());

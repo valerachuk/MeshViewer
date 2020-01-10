@@ -13,7 +13,7 @@ GLWindow::GLWindow(const std::string& title, uint32_t width, uint32_t height) :
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+	glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 
 	handle = glfwCreateWindow(width, height, title.data(), nullptr, nullptr);
 
@@ -117,4 +117,38 @@ void GLWindow::setScrollCallback(const ScrollCallback& _scrollCallback)
 GLFWwindow* GLWindow::getGLFWHandle() const
 {
 	return handle;
+}
+
+void GLWindow::hideConsole()
+{
+	::ShowWindow(::GetConsoleWindow(), SW_HIDE);
+}
+
+void GLWindow::showConsole()
+{
+	::ShowWindow(::GetConsoleWindow(), SW_SHOW);
+}
+
+void GLWindow::setFullScreen()
+{
+	glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
+	GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+	const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+
+	glfwWindowHint(GLFW_RED_BITS, mode->redBits);
+	glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
+	glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
+	glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
+	glfwSetWindowMonitor(handle, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+	glfwSwapInterval(1);
+}
+
+void GLWindow::setHalfScreenWindowed()
+{
+	glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
+	GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+	const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+
+	glfwSetWindowMonitor(handle, nullptr, mode->width / 4, mode->height / 4, mode->width / 2, mode->height / 2, mode->refreshRate);
+	glfwSwapInterval(1);
 }

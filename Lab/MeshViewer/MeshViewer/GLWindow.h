@@ -4,6 +4,7 @@
 #include <iostream>
 #include <GL\glew.h>	
 #include <glfw\glfw3.h>	
+#include <Windows.h>
 
 enum class Modifier {
 	NoModifier = 0,
@@ -53,6 +54,9 @@ enum class KeyCode {
 	F7 = 296,
 	F8 = 297,
 	F9 = 298,
+	F10 = 299,
+	F11 = 300,
+	F12 = 301,
 };
 
 class GLWindow {
@@ -73,6 +77,11 @@ public:
 	void setScrollCallback(const ScrollCallback&);
 
 	GLFWwindow* getGLFWHandle() const;
+
+	static void hideConsole();
+	static void showConsole();
+	void setFullScreen();
+	void setHalfScreenWindowed();
 
 private:
 	GLFWwindow* handle;
