@@ -4,9 +4,9 @@
 #include "Vertex.h"
 #include "GLRenderSystem.h"
 
-glm::vec3 red{ 1, 0, 0 };
-glm::vec3 green{ 0, 1, 0 };
-glm::vec3 blue{ 0, 0, 1 };
+glm::vec3 red{ 1.0f, 0.0f, 0.0f };
+glm::vec3 green{ 0.0f, 1.0f, 0.0f };
+glm::vec3 blue{ 0.0f, 0.0f, 1.0f };
 
 std::vector<Vertex> QUBE = std::vector<Vertex>{
     Vertex(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.0f,  0.0f, -1.0f), red),

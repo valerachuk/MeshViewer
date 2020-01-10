@@ -80,7 +80,6 @@ void selectTarget(double xPos, double yPos)
     {
         scene.setSelectionId(id);
         viewportPtr->getCamera().updateTarget(scene.getCurrentSelection().getWorldPosition());
-        viewportPtr->getCamera().setIsoView();
     }
 }
 

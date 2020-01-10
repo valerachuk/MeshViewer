@@ -1,6 +1,6 @@
 #include "Mesh.h"
 
-Mesh::Mesh(std::vector<Vertex>& vertices, bool isDefaultColor, glm::vec3 color):
+Mesh::Mesh(const std::vector<Vertex>& vertices, bool isDefaultColor, glm::vec3 color):
 	VBO(0),
 	VAO(0),
 	color(color), 
@@ -16,8 +16,8 @@ Mesh::Mesh(std::vector<Vertex>& vertices, bool isDefaultColor, glm::vec3 color):
 	centerMass = calcCenterMass(vertices);
 	fitFactor = calcFitFactor(vertices, 1);
 
-	vertices.clear();
-	vertices.shrink_to_fit();
+	/*vertices.clear();
+	vertices.shrink_to_fit();*/
 }
 
 Mesh::~Mesh()
@@ -84,7 +84,7 @@ glm::mat4 Mesh::calcWorldMatrix()
 
 void Mesh::loadMeshToGpu(const std::vector<Vertex>& vertices)
 {
-	if (vertices.size() % 3 != 0)
+	if (vertices.size() % 3 != 0 && vertices.size() <= 0)
 	{
 		throw new std::invalid_argument("Vertices size % 3 must be equals 0!");
 	}

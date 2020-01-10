@@ -9,7 +9,7 @@
 class Mesh
 {
 public:
-	Mesh(std::vector<Vertex>& vertices, bool isDefaultColor = true, glm::vec3 color = glm::vec3(0.0f, 0.0f, 0.0f));
+	Mesh(const std::vector<Vertex>& vertices, bool isDefaultColor = true, glm::vec3 color = glm::vec3(0.0f, 0.0f, 0.0f));
 	~Mesh();
 
 	void setColor(glm::vec3);
