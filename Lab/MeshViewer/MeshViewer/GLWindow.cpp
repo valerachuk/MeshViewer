@@ -38,7 +38,7 @@ GLWindow::GLWindow(const std::string& title, uint32_t width, uint32_t height) :
 
 GLWindow::~GLWindow()
 {
-
+	glfwDestroyWindow(handle);
 }
 
 void GLWindow::internalKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -152,4 +152,23 @@ void GLWindow::setHalfScreenWindowed()
 	glfwSetWindowAttrib(handle, GLFW_DECORATED, GLFW_TRUE);
 	glfwSetWindowMonitor(handle, nullptr, mode->width / 4, mode->height / 4, mode->width / 2, mode->height / 2, mode->refreshRate);
 	glfwSwapInterval(1);
+}
+
+bool GLWindow::requestFilePath(char* path)
+{
+	OPENFILENAMEA ofn;
+
+	ZeroMemory(&ofn, sizeof(ofn));
+
+	ofn.lStructSize = sizeof(ofn);
+	ofn.hwndOwner = NULL;
+	ofn.lpstrFilter = "Ascii Stereolithography (.stl)\0*.stl";
+	ofn.lpstrFile = path;
+	ofn.lpstrFile[0] = '\0';
+	ofn.nMaxFile = MAX_PATH;
+	ofn.nMaxFileTitle = MAX_PATH;
+	ofn.lpstrTitle = "Privet, let me open your file...";
+	ofn.Flags = OFN_DONTADDTORECENT | OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST;
+
+	return GetOpenFileNameA(&ofn);
 }

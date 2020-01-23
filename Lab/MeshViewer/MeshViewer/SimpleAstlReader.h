@@ -2,15 +2,21 @@
 #include <glm\glm.hpp>
 #include <vector>
 #include <fstream>
+#include <string>
 #include "Vertex.h"
+#include <assert.h>
 
 class SimpleAstlReader
 {
 public:
-	static std::vector<Vertex> getVertices(const char* path);
-	
+	SimpleAstlReader(const char* path);
+	std::vector<Vertex>& getVertices();
+
 private:
-	static std::istream& readVec3(std::istream& in, glm::vec3& vector);
-	static std::istream& readFacet(std::istream& in, std::vector<Vertex>& vertices);
-	static std::istream& readSolid(std::istream& in, std::vector<Vertex>& vertices);
+	std::ifstream fileStream;
+	std::vector<Vertex> vertices;
+
+	glm::vec3& readVec3();
+	void readFacet();
+	void readSolid();
 };

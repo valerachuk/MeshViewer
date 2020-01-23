@@ -2,41 +2,35 @@
 #include <GL\glew.h>
 #include <glm\glm.hpp>
 #include <glm\gtc\matrix_transform.hpp>
+#include <iostream>
+#include <memory>
 #include <vector>
-#include "iostream"
 #include "Vertex.h"
+#include "Buffer.h"
 
 class Mesh
 {
 public:
-	Mesh(std::vector<Vertex> vertices, bool isDefaultColor = true, glm::vec3 color = glm::vec3(0.0f, 0.0f, 0.0f));
-	~Mesh();
+	Mesh(std::shared_ptr<Buffer>);
 
-	void setColor(glm::vec3);
 	void setPosition(glm::vec3 inPos);
 	void translate(glm::vec3 delta);
 	void rotate(glm::vec3 vector, float angle);
 
-	glm::vec3 getColor();
+	const Buffer& getBuffer() const;
+
 	glm::vec3 getWorldPosition();
-	const GLuint& getVao();
-	GLuint getVertexCount();
-	bool isColorDefault();
 	glm::mat4 calcWorldMatrix();
 
 private:
-	GLuint VAO, VBO;
-	GLuint vertexCount;
+	std::shared_ptr<Buffer> bufferPtr;
 
-	glm::vec3 color;
 	glm::vec3 centerMass;
-	bool isDefaultColor;
 
 	glm::vec3 worldPosition;
 	glm::mat4 roationMatrix;
 	float fitFactor;
 
-	void loadMeshToGpu(std::vector<Vertex> vertices);
 	float calcFitFactor(const std::vector<Vertex>& vertices, float maxSize);
 	glm::vec3 calcCenterMass(const std::vector<Vertex>& vertices);
 };

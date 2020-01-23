@@ -1,82 +1,89 @@
 #include "SimpleAstlReader.h"
 
-std::vector<Vertex> SimpleAstlReader::getVertices(const char* path)
+SimpleAstlReader::SimpleAstlReader(const char* path)
 {
-	std::ifstream file(path);
-	std::vector<Vertex> vertices = std::vector<Vertex>();
-	readSolid(file, vertices);
-	file.close();
+	fileStream = std::ifstream(path);
+	assert(fileStream.is_open());
+	vertices = std::vector<Vertex>();
+	readSolid();
+	fileStream.close();
+}
+
+std::vector<Vertex>& SimpleAstlReader::getVertices()
+{
 	return vertices;
 }
 
-std::istream& SimpleAstlReader::readVec3(std::istream& in, glm::vec3& vector)
+glm::vec3& SimpleAstlReader::readVec3()
 {
-	in >> vector.x;
-	in >> vector.y;
-	in >> vector.z;
-	return in;
+	glm::vec3 vector(0.0f);
+
+	fileStream >> vector.x;
+	fileStream >> vector.y;
+	fileStream >> vector.z;
+
+	return vector;
 }
 
-std::istream& SimpleAstlReader::readFacet(std::istream& in, std::vector<Vertex>& vertices)
+void SimpleAstlReader::readFacet()
 {
 	glm::vec3 normal(0.0f);
 	std::string skip;
-	in >> skip;
+	fileStream >> skip;
+
 	if (skip != "normal")
 		throw "normal keyword is missing";
 
-	readVec3(in, normal);
+	normal = readVec3();
 
-	in >> skip;
+	fileStream >> skip;
 	if (skip != "outer")
 		throw std::runtime_error("outer keyword is missing");
-	in >> skip;
+
+	fileStream >> skip;
 	if (skip != "loop")
 		throw std::runtime_error("loop keyword is missing");
 
 	glm::vec3 points[3];
 	for (int i = 0; i < 3; i++)
 	{
-		in >> skip;
+		fileStream >> skip;
 		if (skip != "vertex")
 			throw std::runtime_error("vertex keyword is missing");
-		readVec3(in, points[i]);
+		points[i] = readVec3();
 	}
-	in >> skip;
+	fileStream >> skip;
 	if (skip != "endloop")
 		throw std::runtime_error("endloop keyword is missing");
 
-	in >> skip;
+	fileStream >> skip;
 	if (skip != "endfacet")
 		throw std::runtime_error("endfacet keyword is missing");
 
 	for (int i = 0; i < 3; i++)
 	{
-		vertices.push_back(Vertex(points[i], normal, glm::vec3(0.0f, 0.0f, 0.0f)));
+		vertices.push_back(Vertex(points[i], normal, glm::vec3(1.0f, 0.0f, 0.0f)));
 	}
-
-	return in;
 }
 
-std::istream& SimpleAstlReader::readSolid(std::istream& in, std::vector<Vertex>& vertices)
+void SimpleAstlReader::readSolid()
 {
 	std::string skip;
-	in >> skip;
+	fileStream >> skip;
 	if (skip != "solid")
 		throw std::runtime_error("solid keyword is missing");
 
-	in >> skip; //skip solid name
+	fileStream >> skip; //skip solid name
 
-	for (;;)
+	while (true)
 	{
-		in >> skip;
-		if (skip == "endsolid" || in.eof())
-			return in;
+		fileStream >> skip;
+		if (skip == "endsolid" || fileStream.eof())
+			return;
 		if (skip != "facet")
 			throw std::runtime_error("facet keyword is missing");
 
-		readFacet(in, vertices);
+		readFacet();
 	}
 
-	return in;
 }

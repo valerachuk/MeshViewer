@@ -4,6 +4,7 @@
 #include <glm\glm.hpp>
 #include <iostream>
 #include <vector>
+#include <memory>
 
 #include "Shader.h"
 #include "GLwindow.h"
@@ -14,7 +15,6 @@
 #include "Mesh.h"
 #include "Scene.h"
 #include "SimpleAstlReader.h"
-#include "FileDialog.h"
 
 GLRenderSystem* renderSystemPtr;
 Viewport* viewportPtr;
@@ -26,28 +26,30 @@ ButtonCode lastMouse = ButtonCode::UNKNOWN;
 
 void AddModelFormFile()
 {
-    char filePath[1000];
-    if (FileDialog::getPath(filePath))
-    {
-        std::cout << "Opening file..." << std::endl;
-        try
-        {
-            scenePtr->addMesh(new Mesh(SimpleAstlReader::getVertices(filePath), false, glm::vec3(0.8f, 0.9f, 1)));
-            std::cout << "File loaded successfully" << std::endl;
-        }
-        catch (const std::exception & ex)
-        {
-            std::cout << "Invalid file!" << std::endl;
-            std::cout << "Error code: " << ex.what() << std::endl;
-        }
-    }
-    else
+    char filePath[MAX_PATH];
+    if (!GLWindow::requestFilePath(filePath))
     {
         std::cout << "Canceled..." << std::endl;
+        return;
     }
+    std::cout << "Opening file..." << std::endl;
+    try
+    {
+        SimpleAstlReader reader(filePath);
+        std::shared_ptr<Buffer> buffer(new Buffer(reader.getVertices()));
+
+        scenePtr->addMesh(std::unique_ptr<Mesh>(new Mesh(buffer)));
+        std::cout << "File loaded successfully" << std::endl;
+    }
+    catch (const std::exception & ex)
+    {
+        std::cout << "Invalid file - " << filePath << std::endl;
+        std::cout << "Error code: " << ex.what() << std::endl;
+    }
+
 }
 
-void selectTarget(double xPos, double yPos)
+void selectTarget(float xPos, float yPos)
 {
     GLRenderSystem::clearDisplay(0.0f, 0.0f, 0.0f);
     GLRenderSystem& rs = *renderSystemPtr;
@@ -64,7 +66,7 @@ void selectTarget(double xPos, double yPos)
         rs.setIsDefaultColor(false);
         rs.setCustomColor(glm::vec3((float)(i+1)/scene.getMeshCount(), 1.0f, 1.0f));
         rs.setWorldMatrix(scene[i].calcWorldMatrix());
-        rs.render(scene[i].getVao(), scene[i].getVertexCount());
+        rs.render(scene[i].getBuffer().getVAO(), scene[i].getBuffer().getVertexCount());
     }
 
     renderSystemPtr->setRenderMode(lastMode);
@@ -75,15 +77,14 @@ void selectTarget(double xPos, double yPos)
     rs.setShaderProgram(*lastUsed);
 
     int id = (int)glm::roundEven(color[0] * scene.getMeshCount() - 1);
-    //std::cout << "Selected id: " << id << std::endl;
-    if (id >= 0)
+    scene.setSelectionId(id);
+    if (scene.isSelected())
     {
-        scene.setSelectionId(id);
         viewportPtr->getCamera().updateTarget(scene.getCurrentSelection().getWorldPosition());
     }
 }
 
-void onMouseButtonCallback(ButtonCode buttonCode, Action action, Modifier, double xPos, double yPos) {
+void onMouseButtonCallback(ButtonCode buttonCode, Action action, Modifier, float xPos, float yPos) {
     if (action == Action::Press)
     {
         if (buttonCode == ButtonCode::Left)
@@ -113,68 +114,72 @@ void onKeyCallback(KeyCode key, Action act, Modifier mods)
         }
         else if (key == KeyCode::C && mods == Modifier::Alt)
         {
-            scenePtr->addMesh(new Mesh(QUBE));
+            //scenePtr->addMesh(new Mesh(QUBE));
         }
 
-        switch(key)
+        if (mods == Modifier::NoModifier)
         {
-        case KeyCode::F1:
-            cam.setFrontView();
-            break;
+            switch(key)
+            {
+            case KeyCode::F1:
+                cam.setFrontView();
+                break;
             
-        case KeyCode::F2:
-            cam.setRightView();
-            break;
+            case KeyCode::F2:
+                cam.setRightView();
+                break;
             
-        case KeyCode::F3:
-            cam.setRearView();
-            break;
+            case KeyCode::F3:
+                cam.setRearView();
+                break;
             
-        case KeyCode::F4:
-            cam.setLeftView();
-            break;
+            case KeyCode::F4:
+                cam.setLeftView();
+                break;
             
-        case KeyCode::F5:
-            cam.setBottomView();
-            break;
+            case KeyCode::F5:
+                cam.setBottomView();
+                break;
             
-        case KeyCode::F6:
-            cam.setTopView();
-            break;
+            case KeyCode::F6:
+                cam.setTopView();
+                break;
             
-        case KeyCode::F7:
-            cam.setIsoView();
-            break;
+            case KeyCode::F7:
+                cam.setIsoView();
+                break;
 
-        case KeyCode::F8:
-            viewportPtr->setParallelProjection(!viewportPtr->isParalellProjection());
-            break;
+            case KeyCode::F8:
+                viewportPtr->setParallelProjection(!viewportPtr->isParalellProjection());
+                break;
 
-        case KeyCode::F9:
-            renderSystemPtr->setRenderMode((RenderMode)!(bool)renderSystemPtr->getRenderMode());
-            break;
+            case KeyCode::F9:
+                renderSystemPtr->setRenderMode((RenderMode)!(bool)renderSystemPtr->getRenderMode());
+                break;
 
-        case KeyCode::F10:
-            windowPtr->setHalfScreenWindowed();
-            break;
+            case KeyCode::F10:
+                windowPtr->setHalfScreenWindowed();
+                break;
 
-        case KeyCode::F11:
-            windowPtr->setFullScreen();
-            break;
+            case KeyCode::F11:
+                windowPtr->setFullScreen();
+                break;
+            }
+
         }
 
     }
 }
 
-void onCursorCallback(double xPos, double yPos)
+void onCursorCallback(float xPos, float yPos)
 {
     Camera& cam = viewportPtr->getCamera();
     
     const float sens = 0.2f;
-    static double lastX(xPos), lastY(xPos);
+    static float lastX(xPos), lastY(xPos);
 
-    double  deltaX = xPos - lastX;
-    double deltaY = yPos - lastY;
+    float  deltaX = xPos - lastX;
+    float deltaY = yPos - lastY;
 
     lastX = xPos;
     lastY = yPos;
@@ -185,14 +190,14 @@ void onCursorCallback(double xPos, double yPos)
         cam.rotate(cam.getTarget(), cam.getUp(), sens * -deltaX);
         //std::cout << deltaX << " " << deltaY << std::endl;
     }
-    else if (lastMouse == ButtonCode::Left && scenePtr->getCurrentSelectionId() >= 0)
+    else if (lastMouse == ButtonCode::Left && scenePtr->isSelected())
     {
         scenePtr->getCurrentSelection().rotate(cam.calcRight(), sens * deltaY);
         scenePtr->getCurrentSelection().rotate(cam.getUp(), sens * deltaX);
     }
 }
 
-void onScrollCallback(double xOffset, double yOffset)
+void onScrollCallback(float xOffset, float yOffset)
 {
     Camera& camera = viewportPtr->getCamera();
     const float rotationSpeed = 0.2f;
@@ -250,10 +255,9 @@ int main()
         {
             glm::vec3 selectionColor = glm::vec3(0.9f, 0.6f, 0.7f);
 
-            rs.setIsDefaultColor(scene.getCurrentSelectionId() == i ? false : scene[i].isColorDefault());
-            rs.setCustomColor(scene.getCurrentSelectionId() == i ? selectionColor : scene[i].getColor());
+            rs.setIsDefaultColor(true);
             rs.setWorldMatrix(scene[i].calcWorldMatrix());
-            rs.render(scene[i].getVao(), scene[i].getVertexCount());
+            rs.render(scene[i].getBuffer().getVAO(), scene[i].getBuffer().getVertexCount());
         }
 
         glfwSwapBuffers(window.getGLFWHandle());

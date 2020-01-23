@@ -1,93 +1,81 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Graphics">
-      <UniqueIdentifier>{806c8814-c3e7-4681-ab98-9c280bd47346}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Graphics\Header Files">
-      <UniqueIdentifier>{9422147b-595b-48ea-bfdf-e7a1133a7b9c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Graphics\Source Files">
-      <UniqueIdentifier>{ff215eea-51b5-4f78-91bc-29c8213e1473}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Misc">
-      <UniqueIdentifier>{66e9cfc8-e8a3-4437-a32e-d6eb357a8190}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Misc\Header Files">
-      <UniqueIdentifier>{70f14372-e273-4b3c-a25b-ce28d59963be}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Misc\Source Files">
-      <UniqueIdentifier>{38278ad2-b3e7-4d56-932a-25d2f9120275}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Structures">
       <UniqueIdentifier>{e9174935-99ca-4b4f-be87-89a3b52d91c4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{9422147b-595b-48ea-bfdf-e7a1133a7b9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{ff215eea-51b5-4f78-91bc-29c8213e1473}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="FileDialog.cpp">
-      <Filter>Misc\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SimpleAstlReader.cpp">
-      <Filter>Misc\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Viewport.cpp">
-      <Filter>Graphics\Source Files</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Shader.cpp">
-      <Filter>Graphics\Source Files</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Scene.cpp">
-      <Filter>Graphics\Source Files</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Mesh.cpp">
-      <Filter>Graphics\Source Files</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
-      <Filter>Graphics\Source Files</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GLWindow.cpp">
-      <Filter>Graphics\Source Files</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GLRenderSystem.cpp">
-      <Filter>Graphics\Source Files</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
-      <Filter>Graphics\Source Files</Filter>
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Buffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SimpleAstlReader.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="FileDialog.h">
-      <Filter>Misc\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SimpleAstlReader.h">
-      <Filter>Misc\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Camera.h">
-      <Filter>Graphics\Header Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GLRenderSystem.h">
-      <Filter>Graphics\Header Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GLWindow.h">
-      <Filter>Graphics\Header Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Mesh.h">
-      <Filter>Graphics\Header Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Scene.h">
-      <Filter>Graphics\Header Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Shader.h">
-      <Filter>Graphics\Header Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Viewport.h">
-      <Filter>Graphics\Header Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Vertex.h">
       <Filter>Structures</Filter>
     </ClInclude>
     <ClInclude Include="Cube.h">
       <Filter>Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Buffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SimpleAstlReader.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

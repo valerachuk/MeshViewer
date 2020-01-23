@@ -97,7 +97,7 @@ void Camera::setDistnceToTarget(float D)
 
 void Camera::updateTarget(glm::vec3 newTarget)
 {
-	double D = distanceFromEyeToTarget();
+	float D = distanceFromEyeToTarget();
 	target = newTarget;
 	setDistnceToTarget(D);
 }

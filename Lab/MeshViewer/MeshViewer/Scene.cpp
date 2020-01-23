@@ -3,25 +3,12 @@
 Scene::Scene(glm::vec3 indentVector) : 
 	indentVector(indentVector), 
 	currentSelection(-1), 
-	meshCollection(std::vector<Mesh*>()) {}
+	meshCollection(std::vector<std::unique_ptr<Mesh>>()) {}
 
-Scene::~Scene()
+void Scene::addMesh(std::unique_ptr<Mesh> meshPtr)
 {
-	for (int i = 0; i < getMeshCount(); i++)
-	{
-		delete meshCollection[i];
-	}
-}
-
-void Scene::addMesh(Mesh& mesh)
-{
-	mesh.setPosition(indentVector * (float)(getMeshCount()));
-	meshCollection.push_back(&mesh);
-}
-
-void Scene::addMesh(Mesh* mesh)
-{
-	addMesh(*mesh);
+	meshPtr->setPosition(indentVector * (float)(getMeshCount()));
+	meshCollection.push_back(std::move(meshPtr));
 }
 
 Mesh& Scene::getCurrentSelection()
@@ -29,17 +16,25 @@ Mesh& Scene::getCurrentSelection()
 	return operator[](currentSelection);
 }
 
-int Scene::getCurrentSelectionId()
+int Scene::getCurrentSelectionId() const
 {
 	return currentSelection;
 }
 
 void Scene::setSelectionId(int id)
 {
-	currentSelection = id;
+	if (id >= 0)
+	{
+		currentSelection = id;
+	}
 }
 
-int Scene::getMeshCount()
+bool Scene::isSelected() const
+{
+	return currentSelection >= 0;
+}
+
+int Scene::getMeshCount() const
 {
 	return meshCollection.size();
 }

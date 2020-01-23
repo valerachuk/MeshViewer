@@ -83,6 +83,8 @@ public:
 	void setFullScreen();
 	void setHalfScreenWindowed();
 
+	static bool requestFilePath(char*);
+
 private:
 	GLFWwindow* handle;
 	KeyCallback keyCallback;
