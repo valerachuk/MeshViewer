@@ -35,11 +35,8 @@ public:
 	void setProjMatrix(const glm::mat4& matrix);
 	const glm::mat4& getProjMatrix() const;
 
-	void setCustomColor(const glm::vec3& color);
+	void setColor(const glm::vec3& color);
 	const glm::vec3& getCustomColor();
-
-	void setIsDefaultColor(bool isDefault);
-	bool getIsDefaultColor();
 
 	void setShaderProgram(Shader&);
 	Shader* getShaderProgram();

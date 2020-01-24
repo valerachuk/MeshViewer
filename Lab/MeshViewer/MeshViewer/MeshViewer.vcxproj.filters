@@ -68,9 +68,6 @@
     <ClInclude Include="Vertex.h">
       <Filter>Structures</Filter>
     </ClInclude>
-    <ClInclude Include="Cube.h">
-      <Filter>Structures</Filter>
-    </ClInclude>
     <ClInclude Include="Buffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>

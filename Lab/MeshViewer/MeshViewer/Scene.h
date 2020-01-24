@@ -7,21 +7,28 @@
 class Scene
 {
 public:
-	Scene(glm::vec3 spawnDirection);
+	Scene(const glm::vec3& indentVector, const glm::vec3& defaultColor = glm::vec3(1), const glm::vec3& selectionColor = glm::vec3(0.7f, 1.0f, 0.7f));
 
 	void addMesh(std::unique_ptr<Mesh>);
 	
 	void setSelectionId(int id);
+	bool isSelected() const;
 	Mesh& getCurrentSelection();
 	int getCurrentSelectionId() const;
-	bool isSelected() const;
+
 	int getMeshCount() const;
 
-	Mesh& operator[](int i);
+	const glm::vec3& getDefaultColor() const;
+	const glm::vec3& getSelectionColor() const;
+
+	Mesh& operator[](int);
 
 private:
 	std::vector<std::unique_ptr<Mesh>> meshCollection;
+
 	int currentSelection;
 	glm::vec3 indentVector;
 
+	glm::vec3 defaultColor;
+	glm::vec3 selectionColor;
 };

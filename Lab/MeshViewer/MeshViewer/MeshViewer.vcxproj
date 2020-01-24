@@ -33,7 +33,6 @@
   <ItemGroup>
     <ClInclude Include="Buffer.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="Cube.h" />
     <ClInclude Include="GLRenderSystem.h" />
     <ClInclude Include="GLWindow.h" />
     <ClInclude Include="Mesh.h" />

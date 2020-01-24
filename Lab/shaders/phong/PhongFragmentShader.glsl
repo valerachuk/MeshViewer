@@ -3,7 +3,7 @@ out vec4 color;
 
 in vec3 fragNormal;
 in vec3 fragPos;
-in vec3 fragColor;
+uniform vec3 customColor;
 
 uniform float ambientStrength;
 uniform float diffuseStrength;
@@ -23,6 +23,6 @@ void main()
     vec3 reflectDir = reflect(-lightDir, norm);
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32) * specularStrength;
 
-    vec3 result = fragColor * (ambientStrength + diffuse + spec);
+    vec3 result = customColor * (ambientStrength + diffuse + spec);
     color = vec4(result, 1.0f);
 }

@@ -1,8 +1,10 @@
 #include "Scene.h"
 
-Scene::Scene(glm::vec3 indentVector) : 
+Scene::Scene(const glm::vec3& indentVector, const glm::vec3& defaultColor, const glm::vec3& selectionColor) :
 	indentVector(indentVector), 
-	currentSelection(-1), 
+	currentSelection(-1),
+	defaultColor(defaultColor),
+	selectionColor(selectionColor),
 	meshCollection(std::vector<std::unique_ptr<Mesh>>()) {}
 
 void Scene::addMesh(std::unique_ptr<Mesh> meshPtr)
@@ -13,7 +15,7 @@ void Scene::addMesh(std::unique_ptr<Mesh> meshPtr)
 
 Mesh& Scene::getCurrentSelection()
 {
-	return operator[](currentSelection);
+	return *meshCollection[currentSelection];
 }
 
 int Scene::getCurrentSelectionId() const
@@ -37,6 +39,16 @@ bool Scene::isSelected() const
 int Scene::getMeshCount() const
 {
 	return meshCollection.size();
+}
+
+const glm::vec3& Scene::getDefaultColor() const
+{
+	return defaultColor;
+}
+
+const glm::vec3& Scene::getSelectionColor() const
+{
+	return selectionColor;
 }
 
 Mesh& Scene::operator[](int i)

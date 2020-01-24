@@ -88,7 +88,7 @@ const glm::mat4& GLRenderSystem::getProjMatrix() const
 	return projMatrix;
 }
 
-void GLRenderSystem::setCustomColor(const glm::vec3& color)
+void GLRenderSystem::setColor(const glm::vec3& color)
 {
 	customColor = color;
 }
@@ -96,16 +96,6 @@ void GLRenderSystem::setCustomColor(const glm::vec3& color)
 const glm::vec3& GLRenderSystem::getCustomColor()
 {
 	return customColor;
-}
-
-void GLRenderSystem::setIsDefaultColor(bool isDefault)
-{
-	isDefaultColor = isDefault;
-}
-
-bool GLRenderSystem::getIsDefaultColor()
-{
-	return isDefaultColor;
 }
 
 void GLRenderSystem::setShaderProgram(Shader& shader)
@@ -136,7 +126,6 @@ void GLRenderSystem::sendUniformsToShader()
 		shaderProgram->setMat4Uniform("viewMatrix", getViewMatrix());
 		shaderProgram->setMat4Uniform("projMatrix", getProjMatrix());
 		shaderProgram->setVec3Uniform("customColor", getCustomColor());
-		shaderProgram->setBoolUniform("isDefaultColor", getIsDefaultColor());
 
 		shaderProgram->setFloatUniform("ambientStrength", ambientStrength);
 		shaderProgram->setFloatUniform("diffuseStrength", diffuseStrength);

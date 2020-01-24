@@ -3,7 +3,7 @@
 Mesh::Mesh(std::shared_ptr<Buffer> buffer):
 	bufferPtr(buffer),
 	worldPosition(glm::vec3(0.0f)),
-	roationMatrix(glm::mat4(1.0f)),
+	transform(glm::mat4(1.0f)),
 	centerMass(glm::vec3(0.0f)),
 	fitFactor(1)
 {
@@ -11,7 +11,7 @@ Mesh::Mesh(std::shared_ptr<Buffer> buffer):
 	fitFactor = calcFitFactor(bufferPtr->getVertices(), 1);
 }
 
-glm::vec3 Mesh::getWorldPosition()
+const glm::vec3& Mesh::getWorldPosition() const
 {
 	return worldPosition;
 }
@@ -21,14 +21,9 @@ void Mesh::setPosition(glm::vec3 inPos)
 	worldPosition = inPos;
 }
 
-void Mesh::translate(glm::vec3 delta)
-{
-	worldPosition += delta;
-}
-
 void Mesh::rotate(glm::vec3 vector, float angle)
 {
-	roationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(angle), vector) * roationMatrix;
+	transform = glm::rotate(glm::mat4(1.0f), glm::radians(angle), vector) * transform;
 }
 
 const Buffer& Mesh::getBuffer() const
@@ -41,7 +36,7 @@ glm::mat4 Mesh::calcWorldMatrix()
 	glm::mat4 matrix(1.0f);
 	matrix = glm::translate(matrix, worldPosition);
 	matrix = glm::scale(matrix, glm::vec3(1.0f) * fitFactor);
-	matrix = matrix * roationMatrix;
+	matrix = matrix * transform;
 	matrix = glm::translate(matrix, -centerMass);
 	return matrix;
 }

@@ -62,7 +62,7 @@ void SimpleAstlReader::readFacet()
 
 	for (int i = 0; i < 3; i++)
 	{
-		vertices.push_back(Vertex(points[i], normal, glm::vec3(1.0f, 0.0f, 0.0f)));
+		vertices.push_back(Vertex(points[i], normal));
 	}
 }
 

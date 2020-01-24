@@ -11,7 +11,6 @@
 #include "GLRenderSystem.h"
 #include "Camera.h"
 #include "Viewport.h"
-#include "Cube.h"
 #include "Mesh.h"
 #include "Scene.h"
 #include "SimpleAstlReader.h"
@@ -63,8 +62,7 @@ void selectTarget(float xPos, float yPos)
 
     for (int i = 0; i < scene.getMeshCount(); i++)
     {
-        rs.setIsDefaultColor(false);
-        rs.setCustomColor(glm::vec3((float)(i+1)/scene.getMeshCount(), 1.0f, 1.0f));
+        rs.setColor(glm::vec3((float)(i+1)/scene.getMeshCount(), 1.0f, 1.0f));
         rs.setWorldMatrix(scene[i].calcWorldMatrix());
         rs.render(scene[i].getBuffer().getVAO(), scene[i].getBuffer().getVertexCount());
     }
@@ -253,9 +251,7 @@ int main()
 
         for (int i = 0; i < scene.getMeshCount(); i++)
         {
-            glm::vec3 selectionColor = glm::vec3(0.9f, 0.6f, 0.7f);
-
-            rs.setIsDefaultColor(true);
+            rs.setColor(scene.getCurrentSelectionId() == i ? scene.getSelectionColor() : scene.getDefaultColor());
             rs.setWorldMatrix(scene[i].calcWorldMatrix());
             rs.render(scene[i].getBuffer().getVAO(), scene[i].getBuffer().getVertexCount());
         }

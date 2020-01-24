@@ -14,21 +14,19 @@ public:
 	Mesh(std::shared_ptr<Buffer>);
 
 	void setPosition(glm::vec3 inPos);
-	void translate(glm::vec3 delta);
 	void rotate(glm::vec3 vector, float angle);
 
 	const Buffer& getBuffer() const;
 
-	glm::vec3 getWorldPosition();
+	const glm::vec3& getWorldPosition() const;
 	glm::mat4 calcWorldMatrix();
 
 private:
 	std::shared_ptr<Buffer> bufferPtr;
 
 	glm::vec3 centerMass;
-
 	glm::vec3 worldPosition;
-	glm::mat4 roationMatrix;
+	glm::mat4 transform;
 	float fitFactor;
 
 	float calcFitFactor(const std::vector<Vertex>& vertices, float maxSize);
