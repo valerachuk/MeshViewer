@@ -4,12 +4,8 @@ Mesh::Mesh(std::shared_ptr<Buffer> buffer):
 	bufferPtr(buffer),
 	worldPosition(glm::vec3(0.0f)),
 	transform(glm::mat4(1.0f)),
-	centerMass(glm::vec3(0.0f)),
-	fitFactor(1)
-{
-	centerMass = calcCenterMass(bufferPtr->getVertices());
-	fitFactor = calcFitFactor(bufferPtr->getVertices(), 1);
-}
+	centerMass(calcCenterMass(buffer->getVertices())),
+	outerRadius(calcOuterRadius(buffer->getVertices(), centerMass)) {}
 
 const glm::vec3& Mesh::getWorldPosition() const
 {
@@ -35,13 +31,17 @@ glm::mat4 Mesh::calcWorldMatrix()
 {
 	glm::mat4 matrix(1.0f);
 	matrix = glm::translate(matrix, worldPosition);
-	matrix = glm::scale(matrix, glm::vec3(1.0f) * fitFactor);
 	matrix = matrix * transform;
 	matrix = glm::translate(matrix, -centerMass);
 	return matrix;
 }
 
-float Mesh::calcFitFactor(const std::vector<Vertex>& vertices, float maxSize)
+float Mesh::getOuterRadius()
+{
+	return outerRadius;
+}
+
+float Mesh::calcOuterRadius(const std::vector<Vertex>& vertices, const glm::vec3& inPos)
 {
 	float maxRadius = 0;
 
@@ -54,7 +54,7 @@ float Mesh::calcFitFactor(const std::vector<Vertex>& vertices, float maxSize)
 		}
 	}
 
-	return maxSize / maxRadius;
+	return maxRadius;
 }
 
 glm::vec3 Mesh::calcCenterMass(const std::vector<Vertex>& vertices)

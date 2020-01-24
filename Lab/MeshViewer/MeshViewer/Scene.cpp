@@ -1,7 +1,7 @@
 #include "Scene.h"
 
-Scene::Scene(const glm::vec3& indentVector, const glm::vec3& defaultColor, const glm::vec3& selectionColor) :
-	indentVector(indentVector), 
+Scene::Scene(const glm::vec3& indentDirection, const glm::vec3& defaultColor, const glm::vec3& selectionColor) :
+	indentDirection(glm::normalize(indentDirection)),
 	currentSelection(-1),
 	defaultColor(defaultColor),
 	selectionColor(selectionColor),
@@ -9,7 +9,12 @@ Scene::Scene(const glm::vec3& indentVector, const glm::vec3& defaultColor, const
 
 void Scene::addMesh(std::unique_ptr<Mesh> meshPtr)
 {
-	meshPtr->setPosition(indentVector * (float)(getMeshCount()));
+	const float modelDistanceFactor = 1.5f;
+
+	if (getMeshCount() > 0) {
+		Mesh& lastMesh = operator[](getMeshCount() - 1);
+		meshPtr->setPosition((lastMesh.getOuterRadius() + meshPtr->getOuterRadius()) * modelDistanceFactor * indentDirection + lastMesh.getWorldPosition());
+	}
 	meshCollection.push_back(std::move(meshPtr));
 }
 

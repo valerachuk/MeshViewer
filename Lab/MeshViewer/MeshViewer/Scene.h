@@ -7,7 +7,7 @@
 class Scene
 {
 public:
-	Scene(const glm::vec3& indentVector, const glm::vec3& defaultColor = glm::vec3(1), const glm::vec3& selectionColor = glm::vec3(0.7f, 1.0f, 0.7f));
+	Scene(const glm::vec3& indentDirection, const glm::vec3& defaultColor = glm::vec3(1), const glm::vec3& selectionColor = glm::vec3(0.7f, 1.0f, 0.7f));
 
 	void addMesh(std::unique_ptr<Mesh>);
 	
@@ -27,7 +27,7 @@ private:
 	std::vector<std::unique_ptr<Mesh>> meshCollection;
 
 	int currentSelection;
-	glm::vec3 indentVector;
+	glm::vec3 indentDirection;
 
 	glm::vec3 defaultColor;
 	glm::vec3 selectionColor;

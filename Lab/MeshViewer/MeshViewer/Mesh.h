@@ -21,14 +21,16 @@ public:
 	const glm::vec3& getWorldPosition() const;
 	glm::mat4 calcWorldMatrix();
 
+	float getOuterRadius();
+
 private:
 	std::shared_ptr<Buffer> bufferPtr;
 
 	glm::vec3 centerMass;
 	glm::vec3 worldPosition;
 	glm::mat4 transform;
-	float fitFactor;
+	float outerRadius;
 
-	float calcFitFactor(const std::vector<Vertex>& vertices, float maxSize);
+	float calcOuterRadius(const std::vector<Vertex>& vertices, const glm::vec3& inPos);
 	glm::vec3 calcCenterMass(const std::vector<Vertex>& vertices);
 };

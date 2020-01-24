@@ -110,9 +110,9 @@ void onKeyCallback(KeyCode key, Action act, Modifier mods)
         {
             AddModelFormFile();
         }
-        else if (key == KeyCode::C && mods == Modifier::Alt)
+        else if (key == KeyCode::D && mods == Modifier::Control)
         {
-            //scenePtr->addMesh(new Mesh(QUBE));
+            scenePtr->addMesh(std::unique_ptr<Mesh>(new Mesh(scenePtr->getCurrentSelection())));
         }
 
         if (mods == Modifier::NoModifier)
