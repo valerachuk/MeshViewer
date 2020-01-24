@@ -33,5 +33,5 @@ class MeshViewer {
     static void onScrollCallback(double xOffset, double yOffset);
 
 public:
-    void startProgramm();
+    void startProgram();
 };

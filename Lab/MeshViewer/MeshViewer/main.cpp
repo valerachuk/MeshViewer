@@ -3,5 +3,5 @@
 int main()
 {
     MeshViewer wp;
-    wp.startProgramm();
+    wp.startProgram();
 }

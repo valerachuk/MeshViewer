@@ -1,13 +1,11 @@
 #include "MeshViewer.h"
 
-
 GLRenderSystem* MeshViewer::renderSystemPtr;
 Viewport* MeshViewer::viewportPtr;
 GLWindow* MeshViewer::windowPtr;
 Scene* MeshViewer::scenePtr;
 Shader* MeshViewer::unlitShaderPtr;
 ButtonCode MeshViewer::lastMouse = ButtonCode::UNKNOWN;
-
 
 void MeshViewer::AddModelFormFile()
 {
@@ -97,7 +95,7 @@ void MeshViewer::onKeyCallback(KeyCode key, Action act, Modifier mods)
         {
             AddModelFormFile();
         }
-        else if (key == KeyCode::D && mods == Modifier::Control)
+        else if (key == KeyCode::D && mods == Modifier::Control && scenePtr->isSelected())
         {
             scenePtr->addMesh(std::unique_ptr<Mesh>(new Mesh(scenePtr->getCurrentSelection())));
         }
@@ -190,7 +188,7 @@ void MeshViewer::onScrollCallback(double xOffset, double yOffset)
     camera.setDistnceToTarget(glm::abs(camera.distanceFromEyeToTarget() + yOffset * rotationSpeed));
 }
 
-void MeshViewer::startProgramm()
+void MeshViewer::startProgram()
 {
     glfwInit();
     glewInit();
