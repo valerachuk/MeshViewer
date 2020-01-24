@@ -9,7 +9,7 @@
 
 class Shader {
 private:
-	std::string ReadFile(const GLchar* path);
+	std::string ReadFile(const char* path);
 	GLuint shaderProgram;
 
 public:

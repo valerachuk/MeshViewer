@@ -76,7 +76,7 @@ public:
 	void setMouseCallback(const MouseCallback&);
 	void setScrollCallback(const ScrollCallback&);
 
-	GLFWwindow* getGLFWHandle() const;
+	GLFWwindow* getGLFWHandle();
 
 	static void hideConsole();
 	static void showConsole();

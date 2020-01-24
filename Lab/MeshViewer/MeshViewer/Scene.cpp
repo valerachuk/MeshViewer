@@ -41,7 +41,7 @@ bool Scene::isSelected() const
 	return currentSelection >= 0;
 }
 
-int Scene::getMeshCount() const
+size_t Scene::getMeshCount() const
 {
 	return meshCollection.size();
 }

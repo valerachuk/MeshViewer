@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include <memory>
 #include <GL\glew.h>
 #include <glm\glm.hpp>
 #include "Shader.h"
@@ -15,7 +16,7 @@ enum class RenderMode
 class GLRenderSystem
 {
 public:
-	GLRenderSystem();
+	GLRenderSystem(const Shader& shader);
 
 	static void init();
 	static void clearDisplay(float red, float green, float blue);
@@ -38,8 +39,8 @@ public:
 	void setColor(const glm::vec3& color);
 	const glm::vec3& getCustomColor();
 
-	void setShaderProgram(Shader&);
-	Shader* getShaderProgram();
+	void setShaderProgram(const Shader&);
+	Shader& getShaderProgram();
 
 	RenderMode getRenderMode();
 	void setRenderMode(RenderMode mode);
@@ -55,7 +56,7 @@ private:
 	glm::vec3 cameraPos;
 	float ambientStrength, diffuseStrength, specularStrength;
 
-	Shader* shaderProgram;
+	Shader shaderProgram;
 
 	RenderMode renderMode;
 

@@ -1,13 +1,13 @@
 #include "GLRenderSystem.h"
 
-GLRenderSystem::GLRenderSystem() :
+GLRenderSystem::GLRenderSystem(const Shader& shader) :
 	worldMatrix(glm::mat4(1.0f)),
 	projMatrix(glm::mat4(1.0f)),
 	viewMatrix(glm::mat4(1.0f)),
 	isDefaultColor(true),
 	customColor(glm::vec3(1.0f)),
 	cameraPos(glm::vec3(1.0f)),
-	shaderProgram(nullptr),
+	shaderProgram(shader),
 	renderMode(RenderMode::Triangles)
 {
 	setupLight(glm::vec3(0), 0, 0, 0);
@@ -98,12 +98,12 @@ const glm::vec3& GLRenderSystem::getCustomColor()
 	return customColor;
 }
 
-void GLRenderSystem::setShaderProgram(Shader& shader)
+void GLRenderSystem::setShaderProgram(const Shader& shader)
 {
-	shaderProgram = &shader;
+	shaderProgram = shader;
 }
 
-Shader* GLRenderSystem::getShaderProgram()
+Shader& GLRenderSystem::getShaderProgram()
 {
 	return shaderProgram;
 }
@@ -120,26 +120,23 @@ void GLRenderSystem::setRenderMode(RenderMode mode)
 
 void GLRenderSystem::sendUniformsToShader()
 {
-	if (shaderProgram != nullptr)
-	{
-		shaderProgram->setMat4Uniform("worldMatrix", getWorldMatrix());
-		shaderProgram->setMat4Uniform("viewMatrix", getViewMatrix());
-		shaderProgram->setMat4Uniform("projMatrix", getProjMatrix());
-		shaderProgram->setVec3Uniform("customColor", getCustomColor());
-
-		shaderProgram->setFloatUniform("ambientStrength", ambientStrength);
-		shaderProgram->setFloatUniform("diffuseStrength", diffuseStrength);
-		shaderProgram->setFloatUniform("specularStrength", specularStrength);
-		shaderProgram->setVec3Uniform("lightPos", lightPos);
-		shaderProgram->setVec3Uniform("camPos", cameraPos);
-	}
+	shaderProgram.setMat4Uniform("worldMatrix", getWorldMatrix());
+	shaderProgram.setMat4Uniform("viewMatrix", getViewMatrix());
+	shaderProgram.setMat4Uniform("projMatrix", getProjMatrix());
+	shaderProgram.setVec3Uniform("customColor", getCustomColor());
+				 
+	shaderProgram.setFloatUniform("ambientStrength", ambientStrength);
+	shaderProgram.setFloatUniform("diffuseStrength", diffuseStrength);
+	shaderProgram.setFloatUniform("specularStrength", specularStrength);
+	shaderProgram.setVec3Uniform("lightPos", lightPos);
+	shaderProgram.setVec3Uniform("camPos", cameraPos);
 }
 
 void GLRenderSystem::renderVertices(GLuint VAO, GLuint verticesCount)
 {
 	glBindVertexArray(VAO);
 
-	shaderProgram->UseProgram();
+	shaderProgram.UseProgram();
 	sendUniformsToShader();
 
 	glDrawArrays(GL_TRIANGLES, 0, verticesCount);

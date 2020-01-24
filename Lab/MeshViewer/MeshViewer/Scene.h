@@ -16,7 +16,7 @@ public:
 	Mesh& getCurrentSelection();
 	int getCurrentSelectionId() const;
 
-	int getMeshCount() const;
+	size_t getMeshCount() const;
 
 	const glm::vec3& getDefaultColor() const;
 	const glm::vec3& getSelectionColor() const;

@@ -83,14 +83,14 @@ void GLWindow::internalScrollCallback(GLFWwindow* window, double xoffset, double
 uint32_t GLWindow::getWidth() const
 {
 	int width, height;
-	glfwGetFramebufferSize(getGLFWHandle(), &width, &height);
+	glfwGetFramebufferSize(handle, &width, &height);
 	return width;
 }
 
 uint32_t GLWindow::getHeigth() const
 {
 	int width, height;
-	glfwGetFramebufferSize(getGLFWHandle(), &width, &height);
+	glfwGetFramebufferSize(handle, &width, &height);
 	return height;
 }
 
@@ -114,7 +114,7 @@ void GLWindow::setScrollCallback(const ScrollCallback& _scrollCallback)
 	scrollCallback = _scrollCallback;
 }
 
-GLFWwindow* GLWindow::getGLFWHandle() const
+GLFWwindow* GLWindow::getGLFWHandle()
 {
 	return handle;
 }

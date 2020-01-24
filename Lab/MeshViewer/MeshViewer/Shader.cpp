@@ -1,6 +1,6 @@
 #include "Shader.h"
 
-std::string Shader::ReadFile(const GLchar* path)
+std::string Shader::ReadFile(const char* path)
 {
     std::ifstream file(path);
     std::string shaderString;
